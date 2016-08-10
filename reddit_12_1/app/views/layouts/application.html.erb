@@ -9,21 +9,37 @@
   </head>
 
   <body>
-    <% flash.each do |name, msg| %>
-      <%= content_tag(:div, msg, class: "alert alert-#{name}") %>
-    <% end %>
-    <% if user_signed_in? %>
-      <ul>
-        <li><%= link_to "submit link", new_link_path %></li>
-        <li><%= link_to "Account", edit_user_registration_path %></li>
-        <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete, data: { confirm: "are you sure?" } %></li>
-      </ul>
-    <% else %>
-      <ul>
-        <li><%= link_to "Sign In", new_user_session_path %></li>
-        <li><%= link_to "Sign Up", new_user_registration_path %></li>
-      </ul>
-    <% end %>
-    <%= yield %>
+    <header class="navbar navbar-default" role="navigation">
+      <div class="navbar-inner">
+        <div class="container">
+          <div id="logo" class="navbar-brand">
+            <%= link_to "Reddit", root_path %>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <% if user_signed_in? -%>
+              <ul class="nav navbar-nav navbar-right">
+                <li><%= link_to 'Submit Link', new_link_path %></li>
+                <li><%= link_to 'Account', edit_user_registration_path %></li>
+                <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete, data: { confirm: 'are you sure?' } %></li>
+              </ul>
+            <% else -%>
+              <ul class="nav navbar-nav pull-right">
+                <li><%= link_to 'Sing Up', new_user_registration_path %></li>
+                <li><%= link_to 'Sign in', new_user_session_path %></li>
+              </ul>
+            <% end -%>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div id="main_content" class="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag(:div, msg, class: "alert alert-#{name}") %>
+      <% end %>
+      <div id="content" class="col-md-9 center-block">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>
