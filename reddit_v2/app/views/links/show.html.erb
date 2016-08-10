@@ -1,0 +1,8 @@
+<div class="col-md-6">
+  <h2><%= @link.title %></h2>
+  <%= link_to @link.url %><br>
+  <div class="btn-group btn-group-sm">
+    <%= link_to "編集", edit_link_path(@link), class: "btn btn-warning" %>
+    <%= link_to "削除", @link, method: :delete, data: { confirm: 'are you sure?' }, class: "btn btn-danger" %>
+  </div>
+</div>
