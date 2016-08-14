@@ -1,8 +1,39 @@
-<div class="col-md-6">
-  <h2><%= @link.title %></h2>
-  <%= link_to @link.url %><br>
-  <div class="btn-group btn-group-sm">
-    <%= link_to "編集", edit_link_path(@link), class: "btn btn-warning" %>
-    <%= link_to "削除", @link, method: :delete, data: { confirm: 'are you sure?' }, class: "btn btn-danger" %>
+<div class="row">
+  <div class="col-md-6">
+    <h2><%= @link.title %></h2>
+    URL: <%= link_to @link.url %><hr>
+    <% if current_user == @link.user %>
+      <div class="btn-group btn-group-sm">
+        <%= link_to "編集", edit_link_path(@link), class: "btn btn-warning" %>
+        <%= link_to "削除", @link, method: :delete, data: { confirm: 'are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <div class="btn-group">
+      <%= link_to like_link_path(@link), method: :put, class: 'btn btn-success btn-sm' do %>
+        <span class="glyphicon glyphicon-chevron-up"></span>
+        Upvote
+        <%= @link.get_upvotes.size %>
+      <% end %>
+      <%= link_to dislike_link_path(@link), method: :put, class: 'btn btn-warning btn-sm' do %>
+        <span class="glyphicon glyphicon-chevron-down"></span>
+        Downvote
+        <%= @link.get_downvotes.size %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= simple_form_for [@link, Comment.new] do |f| %>
+    <div class="form-group">
+      <%= f.text_area :body, class: 'form-control' %>
+    </div>
+    <br/>
+    <%= f.submit 'コメントする', class: 'btn btn-success' %>
+    <% end %>
   </div>
 </div>

@@ -1,19 +1,20 @@
 # LinksController
 class LinksController < ApplicationController
+  before_action :find_links, except: [:index, :new, :create]
+
   def index
     @links = Link.all.order(created_at: :desc)
   end
 
   def show
-    @link = Link.find(params[:id])
   end
 
   def new
-    @link = Link.new
+    @link = current_user.links.build
   end
 
   def create
-    @link = Link.new(link_params)
+    @link = current_user.links.build(link_params)
     if @link.save
       redirect_to @link
     else
@@ -22,11 +23,9 @@ class LinksController < ApplicationController
   end
 
   def edit
-    @link = Link.find(params[:id])
   end
 
   def update
-    @link = Link.find(params[:id])
     if @link.update(link_params)
       redirect_to @link
     else
@@ -35,14 +34,27 @@ class LinksController < ApplicationController
   end
 
   def destroy
-    @link = Link.find(params[:id])
     @link.destroy
     redirect_to root_path
+  end
+
+  def upvote
+    @link.upvote_by current_user
+    redirect_to :back
+  end
+
+  def downvote
+    @link.downvote_by current_user
+    redirect_to :back
   end
 
   private
 
   def link_params
     params.require(:link).permit(:title, :url)
+  end
+
+  def find_links
+    @link = Link.find(params[:id])
   end
 end
