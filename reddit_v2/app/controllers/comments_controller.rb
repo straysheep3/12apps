@@ -1,12 +1,9 @@
 class CommentsController < ApplicationController
-  before_action :find_links
-
-  def new
-    @comment = @link.comments.build
-  end
+  before_action :set_comment, only: [:show, :edit, :update, :delete]
 
   def create
-    @comment = @link.comments.build(comment_params)
+    @link = Link.find(params[:link_id])
+    @comment = @link.comments.new(comment_params)
     @comment.user = current_user
     if @comment.save
       redirect_to :back
@@ -17,11 +14,11 @@ class CommentsController < ApplicationController
 
   private
 
-  def find_links
-    @link = Link.find(params[:link_id])
+  def comment_params
+    params.require(:comment).permit(:link_id, :body, :user_id)
   end
 
-  def comment_params
-    params.require(:comment).permit(:body)
+  def set_comment
+    @comment = Comment.find(params[:id])
   end
 end

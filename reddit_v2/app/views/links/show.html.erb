@@ -36,4 +36,8 @@
     <%= f.submit 'コメントする', class: 'btn btn-success' %>
     <% end %>
   </div>
+  <div class="col-md-3">
+    <%= render :partial => @link.comments %>
+    コメント
+  </div>
 </div>
